@@ -29,7 +29,7 @@ hr {
   height:7px;
 }
 .componentName {
-  color:#dd4814;
+  color:#ff0090;
   display:inline-block;
   font-size:16pt;
   font-weight:bold;
@@ -45,12 +45,12 @@ hr {
 }
 .mod {
   display:inline;
-  color:#699FA1;
+  color:#ca1f7b;
   font-size:14pt;
   font-weight:bold;
 }
 .modHelpButton {
-  color:#699FA1;
+  color:#ca1f7b;
   margin:0px;
   font-size:12pt;
 }
@@ -58,7 +58,7 @@ hr {
   color:#A5D6D9;
 }
 .modHelpButton:focus {
-  color:#699FA1;
+  color:#ca1f7b;
 }
 .pkgTitl {
   font-size:10pt;
@@ -116,6 +116,6 @@ hr {
   margin:0px;
 }
 .mod_icon {
-  color:#699FA1;
+  color:#ff0090;
   margin:0px;
 }

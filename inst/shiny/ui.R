@@ -9,7 +9,8 @@ tagList(
   ),
   navbarPage(
     theme = bslib::bs_theme(version = 3,
-                            bootswatch = "united"),
+                            bootswatch = "united", primary = "#ff0090",
+                            secondary = "#ca1f7b"),
     id = 'tabs',
     collapsible = TRUE,
     header = tagList(

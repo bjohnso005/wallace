@@ -6,6 +6,8 @@ output: html_document
 #### *Wallace* was created and expanded by an international team of ecologists and biogeographers:  
 <br>
 
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1uXbwHHfgsXcUKfSZw5ZJ0?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 ## Developers
 
 <img src="img/jamie.jpg" alt="jamie" style="width: 100px;"/>
@@ -20,12 +22,12 @@ output: html_document
 
 <img src="img/andrea.png" alt="andrea" style="width: 100px;"/>
 
-<a href="https://andrepazv.github.io" target="_blank">Andrea Paz</a> (developer) received her PhD at CUNY Graduate Center and City College of New York, after which she was a Postdoctoral Researcher at the Crowther Lab in ETH Zürich. She is now an Assistant Professor at the Biological Sciences Department, University of Montréal.  
+<a href="https://andrepazv.github.io" target="_blank">Andrea Paz</a> <span style="color: #ca1f7b;">(developer) received her PhD at CUNY Graduate Center and City College of New York, after which she was a Postdoctoral Researcher at the Crowther Lab in ETH Zürich. She is now an Assistant Professor at the Biological Sciences Department, University of Montréal.</span>  
 <br>
 
 <img src="img/bethany.jpg" alt="bethany" style="width: 100px;"/>
 
-<a href="https://github.com/bjohnso005" target="_blank">Bethany A. Johnson</a> (developer) received her MS in Biology from the City College of New York and is currently a Visiting Scientist at the Center for Biodiversity & Conservation at the American Museum of Natural History.  
+<a href="https://github.com/bjohnso005" target="_blank">Bethany A. Johnson</a> <span style="color: #ca1f7b;">(developer) received her MS in Biology from the City College of New York and is currently a Visiting Scientist at the Center for Biodiversity & Conservation at the American Museum of Natural History.</span>  
 <br>
 
 <a href="https://www.amnh.org/research/staff-directory/daniel-lopez-lozano" target="_blank">Daniel López Lozano</a> (developer) is a Biodiversity Informatics Specialist at the American Museum of Natural History's Center for Biodiversity & Conservation.   
@@ -33,7 +35,7 @@ output: html_document
 
 <img src="img/valentina.png" alt="valentina" style="width: 100px;"/>
 
-<a href="https://www.researchgate.net/profile/Valentina-Grisales-Betancur" target="_blank">Valentina Grisales-Betancur</a> (developer) completed her undergraduate degree at EAFIT University in Colombia and visited the Anderson lab at CCNY and Blair lab at AMNH.  
+<a href="https://www.researchgate.net/profile/Valentina-Grisales-Betancur" target="_blank">Valentina Grisales-Betancur</a> <span style="color: #ca1f7b;">(developer) completed her undergraduate degree at EAFIT University in Colombia and visited the Anderson lab at CCNY and Blair lab at AMNH.</span>  
 <br>
 
 <img src="img/dean.png" alt="dean" style="width: 100px;"/>
@@ -60,14 +62,14 @@ output: html_document
 
 <img src="img/mary.png" alt="mary" style="width: 100px;"/>
 
-<a href="https://www.amnh.org/research/staff-directory/mary-e-blair" target="_blank">Mary E. Blair</a> (co-manager) is the Director of Biodiversity Informatics Research at the Center for Biodiversity & Conservation at the American Museum of Natural History.  
+<a href="https://www.amnh.org/research/staff-directory/mary-e-blair" target="_blank">Mary E. Blair</a> <span style="color: #ca1f7b;">(co-manager) is the Director of Biodiversity Informatics Research at the Center for Biodiversity & Conservation at the American Museum of Natural History.</span>  
 <br>
 
 ## Contributors
 
 <img src="img/sarah.png" alt="sarah" style="width: 100px;"/>
 
-Sarah Meenan (contributor) completed her undergraduate degree from the City College of New York and now works for the NYC Parks Department.  
+<span style="color: #ca1f7b;">Sarah Meenan (contributor) completed her undergraduate degree from the City College of New York and now works for the NYC Parks Department.</span>  
 <br>
 
 <img src="img/olivier.jpeg" alt="olivier" style="width: 100px;"/>
@@ -87,12 +89,12 @@ Sarah Meenan (contributor) completed her undergraduate degree from the City Coll
 
 <img src="img/hannahO.png" alt="hannahO" style="width: 100px;"/>
 
-<a href="https://hannahlowens.weebly.com/" target="_blank">Hannah Owens</a> (contributor, external partner) is a Marie Skłodowska Curie Fellow at the Center for Macroecology, Evolution, and Climate at the University of Copenhagen.  
+<a href="https://hannahlowens.weebly.com/" target="_blank">Hannah Owens</a> <span style="color: #ca1f7b;">(contributor, external partner) is a Marie Skłodowska Curie Fellow at the Center for Macroecology, Evolution, and Climate at the University of Copenhagen.</span>  
 <br>
 
 <img src="img/saraV.jpeg" alt="saraV" style="width: 100px;"/>
 
-<a href="https://paleobiogeography.org/" target="_blank">Sara Varela</a> (contributor, external partner) is a Principal Investigator at the MAPAS Lab at the University of Vigo in Spain.  
+<a href="https://paleobiogeography.org/" target="_blank">Sara Varela</a> <span style="color: #ca1f7b;">(contributor, external partner) is a Principal Investigator at the MAPAS Lab at the University of Vigo in Spain.</span>  
 <br>
 
 ## Past Developers
