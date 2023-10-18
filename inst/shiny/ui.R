@@ -8,7 +8,7 @@ tagList(
     functions = c("scrollLogger", "disableModule", "enableModule")
   ),
   navbarPage(
-    theme = bslib::bs_theme(version = 3,
+    theme = bslib::bs_theme(version = 5,
                             bootswatch = "united", primary = "#ff0090",
                             secondary = "#ca1f7b"),
     id = 'tabs',

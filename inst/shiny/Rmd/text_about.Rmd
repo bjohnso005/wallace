@@ -3,6 +3,11 @@ title: "intro"
 output: html_document
 ---
 
+<iframe src="https://giphy.com/embed/eDDrmbtY0aSAII8ffT" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+
+<FONT COLOR = #ff0090> This version of *Wallace* highlights the contributions of the female developers.
+</font>
+
 ### **What is *Wallace*?**  
 
 <img src="logo.png" alt="logo" style="width: 150px; float:right; padding:10px;"/>
