@@ -18,11 +18,11 @@
 hr {
     border: none;
     height: 5px;
-    color: #333; /* old IE */
-    background-color: #333; /* Modern Browsers */
+    color: #ca1f7b; /* old IE */
+    background-color: #ca1f7b; /* Modern Browsers */
 }
 .shiny-progress .bar {
-  background-color:#FF0000;
+  background-color:#ff00900;
   opacity:0.8;
 }
 .shiny-progress .progress {
@@ -70,7 +70,7 @@ hr {
   font-style:italic;
 }
 .step {
-  color: #DD8627;
+  color: #ff0090;
   font-weight:bold;
   font-size:14pt;
 }
@@ -79,13 +79,13 @@ hr {
   font-size:14pt;
 }
 .butReset {
-  background-color: #C51E10;
+  background-color: #ff0090;
   color: white;
   padding: 5px 5px;
   border: none;
 }
 .butReset:hover {
-  background-color: #830D03;
+  background-color: #ca1f7b;
   color: white;
 }
 .butResXf {
@@ -112,7 +112,7 @@ hr {
   color: red;
 }
 .save_icon {
-  color:#606060;
+  color:#ff0090;
   margin:0px;
 }
 .mod_icon {
