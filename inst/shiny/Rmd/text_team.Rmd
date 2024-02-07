@@ -34,7 +34,12 @@ output: html_document
 <a href="https://www.amnh.org/research/staff-directory/daniel-lopez-lozano" target="_blank">Daniel López Lozano</a> (developer) is a Biodiversity Informatics Specialist at the American Museum of Natural History's Center for Biodiversity & Conservation.   
 <br>
 
-<img src="img/valentina.png" alt="valentina" style="width: 100px;"/>
+<img src="img/beth.png" alt="bethany" style="width: 100px;"/>
+
+<a href="https://bethgerstner.weebly.com/research.html" target="_blank">Beth E. Gerstner</a> <span style="color: #ca1f7b;">**(developer) received her PhD from Michigan State University, is a NASA FINESST Award winner, and a Wallace fellow. She currently works for Map of Life at the Center for Biodiversity and Global Change at Yale University.**</span>  
+<br>
+
+<img src="img/valentina2.jpeg" alt="valentina" style="width: 100px;"/>
 
 <a href="https://www.researchgate.net/profile/Valentina-Grisales-Betancur" target="_blank">Valentina Grisales-Betancur</a> <span style="color: #ca1f7b;">**(developer) completed her undergraduate degree at EAFIT University in Colombia and visited the Anderson lab at CCNY and Blair lab at AMNH.**</span>  
 <br>
@@ -88,9 +93,9 @@ output: html_document
 <a href="https://www.researchgate.net/profile/Brian-Maitner" target="_blank">Brian S. Maitner</a> (contributor, external partner) is a researcher at the Geography Department of the University at Buffalo, SUNY.  
 <br>
 
-<img src="img/hannahO.png" alt="hannahO" style="width: 100px;"/>
+<img src="img/hannah.jpeg" alt="hannahO" style="width: 100px;"/>
 
-<a href="https://hannahlowens.weebly.com/" target="_blank">Hannah Owens</a> <span style="color: #ca1f7b;">**(contributor, external partner) is a Marie Skłodowska Curie Fellow at the Center for Macroecology, Evolution, and Climate at the University of Copenhagen.**</span>  
+<a href="https://hannahlowens.weebly.com/" target="_blank">Hannah Owens</a> <span style="color: #ca1f7b;">**(contributor, external partner) is an assistant professor at the Center for Global Mountain Biodiversity & the Center for Macroecology, Evolution, and Climate; Section for Biodiversity; Globe Institute; at the University of Copenhagen.**</span>  
 <br>
 
 <img src="img/saraV.jpeg" alt="saraV" style="width: 100px;"/>
