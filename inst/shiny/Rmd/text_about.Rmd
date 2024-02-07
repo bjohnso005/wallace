@@ -93,6 +93,8 @@ Kass, J.M., Pinilla-Buitrago, G.E, Paz, A., Johnson, B.A., Grisales-Betancur, V.
 
 We dedicate this software to Alfred Russel Wallace, the co-discoverer of evolution by natural selection and the founder of the field of biogeography. 
 
+<img src="barbie_alfred.jpeg" alt="alf" style="width: 300px; float:right; padding:10px;"/>
+
 Currently, *Wallace* is being expanded via funding from the U.S. National Science Foundation DBI-1661510 and NASA 80NSSC18K0406.
 
 *Wallace* was inspired by the 2015 Ebbe Nielsen Challenge of the Global Biodiversity Information Facility (GBIF), for which it was recognized as a finalist and received prize funding.
