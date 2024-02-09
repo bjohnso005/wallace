@@ -16,7 +16,7 @@ Development versions (**like this one**) can be downloaded from Github with the 
 
 ```R
 install.packages("devtools")
-devtools::install_github("wallaceEcoMod/wallace")
+devtools::install_github("https://github.com/bjohnso005/wallace/tree/IDWGS")
 library(wallace)
 run_wallace()
 ```
