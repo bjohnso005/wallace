@@ -3,10 +3,10 @@ title: "intro"
 output: html_document
 ---
 
-### **Wallace v2.1.TFIF**
+### **Wallace v2.1.1.IDWGS**
 
-<FONT COLOR = #ff0090> Thank you for downloading *Wallace v2.1.TFIF*.  
-In celebration of **International Day of Women and Girls in Science** (February 11, 2024), this version of *Wallace* highlights the contributions of the female developers.  
+<FONT COLOR = #ff0090> Thank you for downloading *Wallace v2.1.1.IDWGS*.  
+In celebration of **International Day of Women and Girls in Science** (February 11, 2024), this version of *Wallace* matches 2.1.1, but has aesthetic additions that highlight the contributions of the female developers.  
 <br>
 Hit play for a The Future is Female playlist while you model!
 </font>

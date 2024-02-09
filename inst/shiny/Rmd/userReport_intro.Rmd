@@ -10,7 +10,7 @@ knit_engines$set(asis = function(options) {
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, eval = FALSE)
 ```
 
-Please find below the R code history from your *Wallace* v2.1.TFIF session. Thank you for using v2.1.TFIF and supporting women & girls in science. 
+Please find below the R code history from your *Wallace* v2.1.1.IDWGS session. Thank you for using v2.1.1.idwgs and supporting women & girls in science. 
 
 You can reproduce your session results by running this R Markdown file in RStudio. 
 
