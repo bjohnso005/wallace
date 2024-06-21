@@ -101,7 +101,9 @@ m <- model_maxent(occs = occs, bg = bg, user.grp = partblock,
 \code{\link[ENMeval]{ENMevaluate}}
 }
 \author{
-Jamie M. Kass <jkass@gradcenter.cuny.edu>
+Jamie M. Kass <jamie.m.kass@gmail.com>
 
 Gonzalo E. Pinilla-Buitrago <gepinillab@gmail.com>
+
+Bethany A. Johnson <bjohnso005@citymail.cuny.edu>
 }

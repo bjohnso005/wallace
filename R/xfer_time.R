@@ -1,6 +1,6 @@
 # Wallace EcoMod: a flexible platform for reproducible modeling of
 # species niches and distributions.
-# 
+#
 # xfer_time.R
 # File author: Wallace EcoMod Dev Team. 2023.
 # --------------------------------------------------------------------------
@@ -92,9 +92,10 @@
 #'   RasterBrick or RasterStack of the environmental variables cropped to the
 #'   area of transfer. The second element is a raster of the transferred model
 #'   with the specified output type.
-#' @author Jamie Kass <jkass@@gradcenter.cuny.edu>
+#' @author Jamie Kass <jamie.m.kass@@gmail.com>
 #' @author Andrea Paz <paz.andreita@@gmail.com>
 #' @author Gonzalo E. Pinilla-Buitrago <gepinillab@@gmail.com>
+#' @author Bethany A. Johnson <bjohnso005@@citymail.cuny.edu>
 #' @seealso \code{\link[dismo]{predict}}, \code{\link{xfer_time}}
 #' \code{\link{xfer_userEnvs}}
 #' @export
@@ -128,18 +129,22 @@ xfer_time <- function(evalOut, curModel, envs, xfExt, alg, outputType = NULL,
     logger,
     message = ("Transferring to new time..."), {
     if (alg == 'BIOCLIM') {
-      modXferTime <- dismo::predict(evalOut@models[[curModel]], xftMsk,
-                                    useC = FALSE)
+      modXferTime <- dismo::predict(evalOut@models[[curModel]], terra::rast(xftMsk))
+      #revert spatraster to raster
+      modXferTime <- raster::raster(modXferTime)
     } else if (alg == 'maxnet') {
       if (outputType == "raw") outputType <- "exponential"
       modXferTime <- predictMaxnet(evalOut@models[[curModel]], xftMsk,
                                           type = outputType, clamp = clamp)
     } else if (alg == 'maxent.jar') {
       modXferTime <- dismo::predict(
-        evalOut@models[[curModel]], xftMsk,
+        evalOut@models[[curModel]], terra::rast(xftMsk),
         args = c(paste0("outputformat=", outputType),
                  paste0("doclamp=", tolower(as.character(clamp)))),
-        na.rm = TRUE)
+        #na.rm = TRUE
+        )
+      #revert spatraster to raster
+      modXferTime <- raster::raster(modXferTime)
     }
   })
   return(list(xferExt = xftMsk, xferTime = modXferTime))

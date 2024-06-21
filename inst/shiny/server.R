@@ -825,7 +825,8 @@ function(input, output, session) {
         namesEnvs <- mxNonzeroCoefs(evalOut()@models[[curModel()]], "maxent.jar")
         for (i in namesEnvs) {
           png(paste0( i, ".png"))
-          dismo::response(evalOut()@models[[curModel()]], var = i)
+          #dismo::response(evalOut()@models[[curModel()]], var = i)
+          plot(predicts::partialResponse(evalOut()@models[[curModel()]], var = i), type="l")
           dev.off()
         }
       }
@@ -842,9 +843,9 @@ function(input, output, session) {
       thresholdRule <- rmm()$prediction$binary$thresholdRule
       predType <- rmm()$prediction$notes
       if (thresholdRule == 'none') {
-        paste0(curSp(), "_", predType, '.', ext)
+        paste0(curSp(), "_", curModel(), "_", predType, '.', ext) #BAJ
       } else {
-        paste0(curSp(), "_", thresholdRule, '.', ext)
+        paste0(curSp(), "_", curModel(), "_", thresholdRule, '.', ext) #BAJ
       }
     },
     content = function(file) {
