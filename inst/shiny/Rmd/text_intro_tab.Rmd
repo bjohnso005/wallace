@@ -5,7 +5,8 @@ output: html_document
 
 #### WORKFLOW
 
-*Wallace* (v2.2.0) currently includes ten components, or steps of a possible workflow. Each component includes two or more modules, which are possible analyses for that step.  
+*Wallace* (v2024.06.21) currently includes thirteen components, or steps of a possible workflow. Each component includes two or more modules, which are possible analyses for that step.  
+
 
 **Components:**  
 
@@ -53,7 +54,22 @@ output: html_document
 - Transfer to User Environments
 - Calculate Environmental Similarity  
 
-**10.** *Reproduce*  
+**10.** *Mask Prediction*  
+- Upload User Prediction  
+- Mask by Shapefile  
+- Mask by Drawn Polygon  
+- Temporal Extract  
+
+**11.** *Calculate Indicators*  
+- Calculate Area Metrics  
+- Calculate Ratio Overlap  
+- Calculate Change Over Time  
+
+**12.** *Estimate Diversity*  
+- Calculate Richness  
+- Calculate Endemism  
+
+**13.** *Reproduce*  
 - Download Session Code  
 - Download Metadata  
 - Download Package References 

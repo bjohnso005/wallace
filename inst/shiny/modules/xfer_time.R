@@ -610,10 +610,11 @@ xfer_time_module_server <- function(input, output, session, common) {
 }
 
 xfer_time_module_map <- function(map, common) {
-
-  spp <- common$spp
-  evalOut <- common$evalOut
   curSp <- common$curSp
+  spp <- common$spp
+  req(spp[[curSp()]]$occs)
+  occs <- common$occs
+  evalOut <- common$evalOut
   rmm <- common$rmm
   mapXfer <- common$mapXfer
 

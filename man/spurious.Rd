@@ -7,7 +7,7 @@
 spurious(x)
 }
 \arguments{
-\item{x}{x}
+\item{x}{sporius}
 }
 \description{
 For internal use.

@@ -56,9 +56,17 @@ printVecAsis <- function(x, asChar = FALSE) {
   }
 }
 
+#' @title fileNameNoExt
+#' @description For internal use. Delete file extensions
+#' @param f file path
+#' @export
+fileNameNoExt <- function(f) {
+  sub(pattern = "(.*)\\..*$", replacement = "\\1", f)
+  }
+
 #' @title Spurious package call to avoid note of functions outside R folder
 #' @description For internal use.
-#' @param x x
+#' @param x sporius
 #' @keywords internal
 #' @export
 spurious <- function(x) {
@@ -72,6 +80,30 @@ spurious <- function(x) {
   shinyjs::disable(x)
   zip::zipr(x)
   return()
+}
+
+#' @title Call WKT for World_Cylindrical_Equal_Area or WGS84
+#' @description For internal use.
+#' @param x "wcea" or "wgs84"
+#' @keywords internal
+#' @export
+getWKT <- function(x) {
+  if (x == "wcea") {
+    wkt <- paste0('PROJCS["World_Cylindrical_Equal_Area",GEOGCS["GCS_WGS_1984",',
+                   'DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],',
+                   'PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],',
+                   'PROJECTION["Cylindrical_Equal_Area"],PARAMETER["false_easting",0.0],',
+                   'PARAMETER["false_northing",0.0],PARAMETER["central_meridian",0.0],',
+                   'PARAMETER["standard_parallel_1",0.0],UNIT["Meter",1.0]]')
+  } else if (x == "wgs84") {
+    wkt <- paste0('GEOGCS["WGS 84",DATUM["WGS_1984",',
+                  'SPHEROID["WGS 84",6378137,298.257223563,',
+                  'AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],',
+                  'PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],',
+                  'UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],',
+                  'AUTHORITY["EPSG","4326"]]')
+  }
+  return(wkt)
 }
 
 ####################### #
@@ -186,8 +218,27 @@ writeLog <- function(logger, ..., type = 'default') {
 #' @keywords internal
 #' @export
 clearAll <- function(map) {
+  # r <- raster::raster(nrow = 1, ncol = 1, xmn = 0, ymn = 0, xmx = 1, ymx = 1)
+  # raster::values(r) <- 0
   map %>% clearMarkers() %>% clearShapes() %>% clearImages() %>%
-    clearControls() %>% removeLayersControl()
+      clearControls() %>% removeLayersControl() %>%
+      clearGroup("mask") %>% clearGroup("indic") %>% clearGroup("diver")
+}
+
+#' @title mapBgPolys
+#' @description For internal use. Function to map all background polygons
+#' @param map leaflet map
+#' @param bgShpXY Polygon
+#' @param color Color of polygon
+#' @param group Group leaflet
+#' @keywords internal
+#' @export
+mapBgPolys <- function(map, bgShpXY, color, group) {
+  for (shp in bgShpXY) {
+    map %>%
+      addPolygons(lng = shp[,1], lat = shp[,2], fill = FALSE,
+                  weight = 4, color = color, group = group)
+  }
 }
 
 #' @title polyZoom
@@ -495,3 +546,5 @@ write_csv_robust <- function(x, ...) {
                           })
   utils::write.csv(a, ...)
 }
+
+

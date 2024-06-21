@@ -95,8 +95,9 @@ xfer_mess_module_server <- function(input, output, session, common) {
 
 xfer_mess_module_map <- function(map, common) {
 
-  spp <- common$spp
   curSp <- common$curSp
+  spp <- common$spp
+  req(spp[[curSp()]]$occs)
   occs <- common$occs
   bgShpXY <- common$bgShpXY
 

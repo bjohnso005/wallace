@@ -27,11 +27,11 @@
 #' @param launch.browser Whether or not to launch a new browser window.
 #' @param port The port for the shiny server to listen on. Defaults to a
 #' random available port.
+#' @param biomodelos logical
 #' @note Please see the official website (\url{https://wallaceecomod.github.io/})
 #' for more details. If you have questions about the application,
 #' please participate in the \href{https://groups.google.com/forum/#!forum/wallaceecomod}{Google Group},
 #' or email the team directly: \email{wallaceEcoMod@@gmail.com}.
-#'
 #' @examples
 #' if(interactive()) {
 #' run_wallace()
@@ -39,8 +39,13 @@
 #' @author Jamie Kass <jamie.m.kass@@gmail.com>
 #' @author Gonzalo E. Pinilla-Buitrago <gepinillab@@gmail.com>
 #' @export
-run_wallace <- function(launch.browser = TRUE, port = getOption("shiny.port")) {
+run_wallace <- function(launch.browser = TRUE, port = getOption("shiny.port"),
+                        biomodelos = FALSE) {
   app_path <- system.file("shiny", package = "wallace")
+  if (biomodelos == TRUE) {
+    wallace::register_module(paste0(app_path, "/custom_modules/occs_biomodelos.yml"))
+    wallace::register_module(paste0(app_path, "/custom_modules/rep_biomodelos.yml"))
+  }
   knitcitations::cleanbib()
   options("citation_format" = "pandoc")
   preexisting_objects <- ls(envir = .GlobalEnv)

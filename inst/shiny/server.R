@@ -26,9 +26,10 @@ function(input, output, session) {
   # REACTIVE VALUES LISTS ####
   ########################## #
 
-  # single species list of lists
+  # List of lists
   spp <- reactiveValues()
   envs.global <- reactiveValues()
+  multi.sp <- reactiveValues()
 
   # Variable to keep track of current log message
   initLogMsg <- function() {
@@ -115,6 +116,15 @@ function(input, output, session) {
   observeEvent(input$xfer_timeHelp, updateTabsetPanel(session, "main", "Module Guidance"))
   observeEvent(input$xfer_userHelp, updateTabsetPanel(session, "main", "Module Guidance"))
   observeEvent(input$xfer_messHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$mask_userSDMHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$mask_expPolyHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$mask_spatialHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$mask_tempHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$indic_overlapHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$indic_rangeHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$indic_timeHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$diver_endemismHelp, updateTabsetPanel(session, "main", "Module Guidance"))
+  observeEvent(input$diver_richnessHelp, updateTabsetPanel(session, "main", "Module Guidance"))
 
   ######################## #
   ### MAPPING LOGIC ####
@@ -156,19 +166,40 @@ function(input, output, session) {
       spp[[curSp()]]$polyXfXY <- xy
       spp[[curSp()]]$polyXfID <- id
     }
+    if(component() == 'mask') {
+      spp[[curSp()]]$polyMaskXY <- xy
+      spp[[curSp()]]$polyMaskID <- id
+    }
     # UI CONTROLS - for some reason, curSp() disappears here unless input is updated
     updateSelectInput(session, "curSp", selected = curSp())
   })
 
   # Call the module-specific map function for the current module
+  # Call the module-specific map function for the current module
+
   observe({
-    # must have one species selected and occurrence data
-    req(length(curSp()) == 1, occs(), module())
-    map_fx <- COMPONENT_MODULES[[component()]][[module()]]$map_function
-    if (!is.null(map_fx)) {
-      do.call(map_fx, list(map, common = common))
+    if (component() == 'diver') {# must have one species selected and occurrence data
+      #req(length(curSp()) ==1, occs(), module())
+      #for this to work with multisp we can't require occs as we will have more than 1 curSp
+      req(length(curSp()) >=1, module())
+      map_fx <- COMPONENT_MODULES[[component()]][[module()]]$map_function
+      if (!is.null(map_fx)) {
+        do.call(map_fx, list(map, common = common))
+      }
     }
+    else {
+      # must have one species selected and occurrence data
+      req(length(curSp()) == 1, module())
+      #for this to work with multisp we can't require occs as we will have more than 1 curSp
+      #req(length(curSp()) >=1, module())
+      map_fx <- COMPONENT_MODULES[[component()]][[module()]]$map_function
+      if (!is.null(map_fx)) {
+        do.call(map_fx, list(map, common = common))
+      }
+    }
+
   })
+
 
   ######################## #
   ### BUTTONS LOGIC ####
@@ -202,15 +233,30 @@ function(input, output, session) {
     shinyjs::toggleState("dlXferEnvs", !is.null(spp[[curSp()]]$transfer$xfEnvsDl))
     shinyjs::toggleState("dlXfer", !is.null(spp[[curSp()]]$transfer$xfEnvs))
     shinyjs::toggleState("dlMess", !is.null(spp[[curSp()]]$transfer$messVals))
+    shinyjs::toggleState("dlMask", !is.null(spp[[curSp()]]$mask$prediction))
+    shinyjs::toggleState("dlMaskExpPoly", !is.null(spp[[curSp()]]$mask$removePoly))
+    shinyjs::toggleState("dlAOO", !is.null(spp[[curSp()]]$indic$AOOraster))
+    shinyjs::toggleState("dlEOO", !is.null(spp[[curSp()]]$indic$EOOpoly))
+    shinyjs::toggleState("dlOverlap", !is.null(spp[[curSp()]]$indic$overlapPolygon))
+    shinyjs::toggleState("dlAreaTimePlot", !is.null(spp[[curSp()]]$indic$areaTime))
+    shinyjs::toggleState("dlAreaTime", !is.null(spp[[curSp()]]$indic$areaTime))
     # shinyjs::toggleState("dlWhatever", !is.null(spp[[curSp()]]$whatever))
   })
 
-  observe({
-    req(length(curSp()) == 2)
-    shinyjs::toggleState("dlPcaResults", !is.null(spp[[paste0(curSp()[1],".",curSp()[2])]]$pca))
-    shinyjs::toggleState("dlOccDens", !is.null(spp[[paste0(curSp()[1],".",curSp()[2])]]$occDens))
-    shinyjs::toggleState("dlNicheOvPlot", !is.null(spp[[paste0(curSp()[1],".",curSp()[2])]]$nicheOv))
-  })
+ observe({
+   req(length(curSp()) == 2)
+   shinyjs::toggleState("dlPcaResults", !is.null(spp[[paste0(curSp()[1],".",curSp()[2])]]$pca))
+   shinyjs::toggleState("dlOccDens", !is.null(spp[[paste0(curSp()[1],".",curSp()[2])]]$occDens))
+   shinyjs::toggleState("dlNicheOvPlot", !is.null(spp[[paste0(curSp()[1],".",curSp()[2])]]$nicheOv))
+ })
+
+ observe({
+   req(length(curSp()) >= 2)
+   shinyjs::toggleState("dlRich", !is.null(multi.sp$richness))
+   shinyjs::toggleState("dlEnd", !is.null(multi.sp$endemism))
+   shinyjs::toggleState("dlSpListSR", !is.null(multi.sp$sppRichness))
+   shinyjs::toggleState("dlSpListSE", !is.null(multi.sp$sppEndemism))
+ })
 
   # # # # # # # # # # # # # # # # # #
   # OBTAIN OCCS: other controls ####
@@ -225,9 +271,20 @@ function(input, output, session) {
     n <- n[!grepl(".", n, fixed = TRUE)]
     # if no current species selected, select the first name
     # NOTE: this line is necessary to retain the selection after selecting different tabs
-    if(!is.null(curSp())) selected <- curSp() else selected <- n[1]
+    if (!is.null(curSp())) {
+      selected <- curSp()
+    } else {
+      selected <- n[1]
+    }
     # if espace component, allow for multiple species selection
-    if(component() == 'espace') options <- list(maxItems = 2) else options <- list(maxItems = 1)
+    if (component() == 'espace') {
+      options <- list(maxItems = 2)
+    # if diver component, allow for multiple species selection
+    } else if (component() == 'diver') {
+      options <- list(maxItems = 100)
+    } else {
+      options <- list(maxItems = 1)
+    }
     # make a named list of their names
     sppNameList <- c(list("Current species" = ""), setNames(as.list(n), n))
     # generate a selectInput ui that lists the available species
@@ -257,7 +314,7 @@ function(input, output, session) {
   #                 scrollX=TRUE, scrollY=400)
   output$occTbl <- DT::renderDataTable({
     # check if spp has species in it
-    req(length(reactiveValuesToList(spp)) > 0)
+    req(length(reactiveValuesToList(spp)) > 0, occs())
     occs() %>%
       dplyr::mutate(occID = as.numeric(occID),
                     longitude = round(as.numeric(longitude), digits = 2),
@@ -1084,7 +1141,7 @@ function(input, output, session) {
           rasPal <- colorNumeric(rasCols, rasVals, na.color='transparent')
           m <- leaflet() %>%
             addLegend("bottomright", pal = legendPal, title = "MESS Values",
-                      labFormat = reverseLabels(2, reverse_order=TRUE),
+                      labFormat = reverseLabel(2, reverse_order=TRUE),
                       values = rasVals, layerId = "train") %>%
             addProviderTiles(input$bmap) %>%
             addRasterImage(mess, colors = rasPal, opacity = 0.7,
@@ -1109,6 +1166,435 @@ function(input, output, session) {
     }
   )
 
+  ########################################### #
+  ### COMPONENT: Mask ####
+  ########################################### #
+
+
+  # convenience function for extent polygon
+  polyExt <- reactive(spp[[curSp()]]$mask$polyExt)
+
+  # get the coordinates of the current background extent shape
+  bgPostXY <- reactive({
+    req(polyExt())
+    polys <- polyExt()@polygons[[1]]@Polygons
+    if (length(polys) == 1) {
+      xy <- list(polys[[1]]@coords)
+    } else{
+      xy <- lapply(polys, function(x) x@coords)
+    }
+    return(xy)
+  })
+
+  selMaskPrExp <- reactive(input$selMaskPrExp)
+  selMaskPrSpa <- reactive(input$selMaskPrSpa)
+  selMaskPrTemp <- reactive(input$selMaskPrTemp)
+
+  output$dlMask <- downloadHandler(
+    filename = function() {
+      ext <- switch(input$maskFileType, raster = 'zip', ascii = 'asc',
+                    GTiff = 'tif', png = 'png')
+      paste0(curSp(), '_mask.', ext)
+    },
+    content = function(file) {
+      if (require(sf)) {
+        req(spp[[curSp()]]$mask$prediction)
+        maskRaster <- spp[[curSp()]]$mask$prediction
+        maskValues <- terra::spatSample(x = terra::rast(maskRaster),
+                                          size = 100, na.rm = TRUE)[, 1]
+        if (input$maskFileType == 'png') {
+          if (!webshot::is_phantomjs_installed()) {
+            logger %>%
+              writeLog(type = "error", "To download PNG prediction, you require to",
+                       " install PhantomJS in your machine. You can use webshot::install_phantomjs()",
+                       " in you are R console. (**)")
+          }
+          if (!any(userValues > 0 & userValues < 1)) {
+            m <- leaflet() %>%
+              addProviderTiles(input$bmap) %>%
+              leafem::addGeoRaster(maskRaster,
+                                   colorOptions = leafem::colorOptions(
+                                     palette = colorRampPalette(
+                                       colors = c('gray', 'darkgreen'))),
+                                   opacity = 0.7, group = 'maskDL',
+                                   layerId = 'maskDL') %>%
+              addLegend("bottomright", colors = c('gray', 'darkgreen'),
+                        title = "Distribution<br>map",
+                        labels = c("Unsuitable", "Suitable"),
+                        opacity = 1, layerId = 'expert') %>%
+              mapBgPolys(bgPostXY(), color = 'green', group = 'maskDL')
+            mapview::mapshot(m, file = file)
+          } else {
+            rasCols <- c("#2c7bb6", "#abd9e9", "#ffffbf", "#fdae61", "#d7191c")
+            quanRas <- quantile(c(raster::minValue(maskRaster),
+                                  raster::maxValue(maskRaster)),
+                                probs = seq(0, 1, 0.1))
+            legendPal <- colorNumeric(rev(rasCols), quanRas, na.color = 'transparent')
+            m <- leaflet() %>%
+              addProviderTiles(input$bmap) %>%
+              leafem::addGeoRaster(maskRaster,
+                                   colorOptions = leafem::colorOptions(
+                                     palette = colorRampPalette(colors = rasCols)),
+                                   opacity = 0.7, group = 'maskDL', layerId = 'maskDL') %>%
+              addLegend("bottomright", pal = legendPal, title = "Suitability<br>(User) (**)",
+                        values = quanRas, layerId = "expert",
+                        labFormat = reverseLabel(2, reverse_order = TRUE)) %>%
+              mapBgPolys(bgPostXY(), color = 'green', group = 'maskDL')
+            mapview::mapshot(m, file = file)
+          }
+        } else if (input$maskFileType == 'raster') {
+          fileName <- curSp()
+          tmpdir <- tempdir()
+          raster::writeRaster(maskRaster, file.path(tmpdir, fileName),
+                              format = input$maskFileType, overwrite = TRUE)
+          owd <- setwd(tmpdir)
+          fs <- paste0(fileName, c('.grd', '.gri'))
+          zip::zipr(zipfile = file, files = fs)
+          setwd(owd)
+        } else {
+          r <- raster::writeRaster(maskRaster, file, format = input$maskFileType,
+                                   overwrite = TRUE)
+          file.rename(r@file@name, file)
+        }
+      } else {
+        logger %>%
+          writeLog("Please install the sf package before downloading rasters.")
+      }
+    }
+  )
+
+  # DOWNLOAD: Shapefile of expert polygons
+  output$dlMaskExpPoly <- downloadHandler(
+    filename = function() paste0(curSp(), '_maskExpPoly.zip'),
+    content = function(file) {
+      tmpdir <- tempdir()
+      owd <- setwd(tmpdir)
+      on.exit(setwd(owd))
+      n <- curSp()
+      expertPolys <- do.call("rbind",
+                             c(args = lapply(seq_along(spp[[curSp()]]$mask$expertPoly),
+                                             function(i){spp[[curSp()]]$mask$expertPoly[i][[1]]}),
+                               makeUniqueIDs = TRUE))
+      sf::st_write(obj = sf::st_as_sf(expertPolys),
+                      dsn = tmpdir,
+                      layer = paste0(n, '_maskExpShp'),
+                      driver = "ESRI Shapefile",
+                      append = FALSE)
+      exts <- c('dbf', 'shp', 'shx')
+      fs <- paste0(n, '_maskExpShp.', exts)
+      zip::zipr(zipfile = file, files = fs)
+      if (file.exists(paste0(file, ".zip"))) {file.rename(paste0(file, ".zip"), file)}
+    },
+    contentType = "application/zip"
+  )
+
+  selTempRaster <- reactive(input$selTempRaster)
+  yearInput <- reactive(input$yearInput)
+  selTempMask <- reactive(input$selTempMask)
+  sliderTemp <- reactive(input$sliderTemp)
+  maskFields <- reactive(input$maskFields)
+  maskAttribute <- reactive(input$maskAttribute)
+
+
+  ########################################### #
+  ### COMPONENT: INDICATORS ####
+  ########################################### #
+  selAreaSource <- reactive(input$selAreaSource)
+  selOverlapSource <- reactive(input$selOverlapSource)
+  selTimeSource <- reactive(input$selTimeSource)
+
+  # Dowload EOO shapefile
+  output$dlEOO <- downloadHandler(
+    filename = function() paste0(curSp(), "_EOO.zip"),
+    content = function(file) {
+      tmpdir <- tempdir()
+      setwd(tempdir())
+      n <- curSp()
+      raster::shapefile(x = spp[[curSp()]]$indic$EOOpoly,
+                        filename = paste0(n, '_EOO'),
+                        overwrite = TRUE)
+      exts <- c('dbf','shp', 'shx')
+      fs <- paste0(n, '_EOO.', exts)
+      zip::zipr(zipfile = file, files = fs)
+      if (file.exists(paste0(file, ".zip"))) {file.rename(paste0(file, ".zip"), file)}
+    },
+    contentType = "application/zip"
+  )
+
+  # Download AOO map
+  output$dlAOO <- downloadHandler(
+    filename = function() {
+      ext <- switch(input$AOOFileType, raster = 'zip', ascii = 'asc',
+                    GTiff = 'tif', png = 'png')
+      paste0(curSp(), "_AOO", '.', ext)
+    },
+    content = function(file) {
+      if(require(sf)) {
+        if (input$AOOFileType == 'png') {
+          if (!webshot::is_phantomjs_installed()) {
+            logger %>%
+              writeLog(type = "error", "To download PNG prediction, you need to",
+                       " install PhantomJS in your machine. You can use webshot::install_phantomjs()",
+                       " in your R console. ")
+          }
+          AOOras <- spp[[curSp()]]$indic$AOOraster
+          # AOO raster transform to polygon for visualization
+          AOOpol <- terra::rast(AOOras)
+          AOOpol <- terra::as.polygons(AOOpol)
+          AOOpol <- AOOpol %>% terra::project(getWKT("wgs84")) %>%
+            sf::st_as_sf()
+
+          # Zoom
+          bb <- sf::st_bbox(AOOpol) %>% as.vector()
+          bbZoom <- polyZoom(bb[1], bb[2], bb[3], bb[4], fraction = 0.05)
+          map %>%
+            fitBounds(bbZoom[1], bbZoom[2], bbZoom[3], bbZoom[4])
+
+          m <- leaflet() %>%
+            addProviderTiles(input$bmap) %>%
+            ##Add legend
+            addLegend("bottomright", colors = "darkorange",
+                      labels = "AOO",
+                      opacity = 1, layerId = 'aooLegend') %>%
+            ##ADD polygon
+            leafem::addFeatures(AOOpol, fillColor = 'darkorange', fillOpacity = 0.9,
+                                opacity = 0, group = 'indic', layerId = 'indicAOO')
+          if (spp[[curSp()]]$indic$AOOsource == "occs") {
+            map %>%
+              addCircleMarkers(data = occs(), lat = ~latitude, lng = ~longitude,
+                               radius = 5, color = 'red', fill = TRUE, fillColor = 'red',
+                               fillOpacity = 0.2, weight = 2, popup = ~pop)
+          }
+          mapview::mapshot(m, file = file)
+        } else if (input$AOOFileType == 'raster') {
+          fileName <-  paste0(curSp(), "_overlap", '.', ext)
+          tmpdir <- tempdir()
+          raster::writeRaster(spp[[curSp()]]$indic$AOOraster,
+                              file.path(tmpdir, fileName),
+                              format = input$AOOFileType, overwrite = TRUE)
+          owd <- setwd(tmpdir)
+          fs <- paste0(fileName, c('.grd', '.gri'))
+          zip::zipr(zipfile = file, files = fs)
+          setwd(owd)
+        } else {
+          r <- raster::writeRaster(spp[[curSp()]]$indic$AOOraster, file,
+                                   format = input$AOOFileType, overwrite = TRUE)
+          file.rename(r@file@name, file)
+        }
+      } else {
+        logger %>% writeLog("Please install the sf package before downloading rasters.")
+      }
+    }
+  )
+
+  # Download overlap map
+  output$dlOverlap <- downloadHandler(
+    filename = function() {
+      ext <- switch(input$OverlapFileType, shapefile = 'zip', png = 'png')
+      paste0(curSp(), "_overlap", '.', ext)
+    },
+    content = function(file) {
+      if(require(sf)) {
+        if (input$OverlapFileType == 'png') {
+          if (!webshot::is_phantomjs_installed()) {
+            logger %>%
+              writeLog(type = "error", "To download PNG prediction, you need to",
+                       " install PhantomJS in your machine. You can use webshot::install_phantomjs()",
+                       " in your R console. ")
+          }
+          m <- leaflet() %>%
+            addProviderTiles(input$bmap) %>%
+            ##Add legend
+            addLegend("bottomright", colors = "darkred",
+                      labels = "Overlap Map", opacity = 1) %>%
+            ##ADD polygon
+            leafem::addFeatures(spp[[curSp()]]$indic$overlapPolygon,
+                                fillColor = 'darkred', fillOpacity = 0.7,
+                                opacity = 0)
+          mapview::mapshot(m, file = file)
+        } else if (input$OverlapFileType == 'shapefile') {
+          tmpdir <- tempdir()
+          setwd(tempdir())
+          n <- curSp()
+          overlapPoly <- spp[[curSp()]]$indic$overlapPolygon
+          sf::st_write(obj = overlapPoly,
+                          dsn = tmpdir,
+                          layer = paste0(n, '_Overlap'),
+                          driver = "ESRI Shapefile",
+                          delete_layer = TRUE)
+          exts <- c('dbf', 'shp', 'shx')
+          fs <- paste0(n, '_Overlap.', exts)
+          zip::zipr(zipfile = file, files = fs)
+          if (file.exists(paste0(file, ".zip"))) {file.rename(paste0(file, ".zip"), file)}
+        }
+      } else {
+        logger %>% writeLog("Please install the sf package before downloading rasters.")
+      }
+    }
+  )
+
+  output$dlAreaTime<- downloadHandler(
+    filename = function() {
+      paste0("Area_through_time", ".csv")
+    },
+    content = function(file) {
+      tbl <- data.frame(spp[[curSp()]]$indic$years,spp[[curSp()]]$indic$areaTime)
+      names(tbl)<-c("Year","Area in km^2")
+      write_csv_robust(tbl, file, row.names = FALSE)
+    }
+  )
+  output$dlAreaTimePlot<-  downloadHandler(
+    filename = function() {
+
+      paste0(curSp(), "_Area_through_time.png")
+    },
+    content = function(file) {
+      png(file, width = 400, height = 400)
+
+      req(spp[[curSp()]]$indic$areaTime)
+      req(spp[[curSp()]]$indic$years)
+      plot(y = spp[[curSp()]]$indic$areaTime, x = spp[[curSp()]]$indic$years, main = "SDM area indic", ylab = "area (square km)",xlab="Time")
+      lines(y = spp[[curSp()]]$indic$areaTime, x = spp[[curSp()]]$indic$years)
+      dev.off()
+    }
+  )
+  overlapField <- reactive(input$overlapField)
+  overlapCat <- reactive(input$overlapCat)
+
+  ########################################### #
+  ### COMPONENT: DIVERSITY ####
+  ########################################### #
+  # download list of species used
+  output$dlSpListSR <- downloadHandler(
+    filename = "used_richness_spp.csv",
+    content = function(file) {
+      tbl <- as.data.frame(multi.sp$sppRichness)
+      write_csv_robust(tbl, file, row.names = FALSE)
+    }
+  )
+  output$dlSpListSE <- downloadHandler(
+    filename = "used_endemism_spp.csv",
+    content = function(file) {
+      tbl <- as.data.frame(multi.sp$sppEndemism)
+      write_csv_robust(tbl, file, row.names = FALSE)
+    }
+  )
+  # download richness map
+  output$dlRich <- downloadHandler(
+    filename = function() {
+      ext <- switch(input$richFileType, raster = 'zip', ascii = 'asc',
+                    GTiff = 'tif', png = 'png')
+      paste0("richness", '.', ext)
+    },
+    content = function(file) {
+      if(require(sf)) {
+        if (input$richFileType == 'png') {
+          if (!webshot::is_phantomjs_installed()) {
+            logger %>%
+              writeLog(type = "error", "To download PNG prediction, you need to",
+                       " install PhantomJS in your machine. You can use webshot::install_phantomjs()",
+                       " in your R console. ")
+          }
+          rich <- multi.sp$richness
+          rasCols <- c("#3288BD", "#99D594", "#E6F598",
+                       "#FEE08B", "#FC8D59", "#D53E4F")
+          minV <- raster::minValue(rich)
+          maxV <- raster::maxValue(rich)
+          legendPal <- colorNumeric(rev(rasCols), minV:maxV,
+                                    na.color = 'transparent')
+          m <- leaflet() %>%
+            addProviderTiles(input$bmap) %>%
+            addLegend("bottomright", pal = legendPal,
+                      title = "Richness",
+                      values = minV:maxV, layerId = "richnessLeg",
+                      labFormat = reverseLabel(2, reverse_order = TRUE)) %>%
+            leafem::addGeoRaster(rich,
+                                 colorOptions = leafem::colorOptions(
+                                   palette = colorRampPalette(colors = rasCols)),
+                                 opacity = 1, group = 'diver',
+                                 layerId = 'richnessRaster')
+          mapview::mapshot(m, file = file)
+        } else if (input$richFileType == 'raster') {
+          fileName <-  "richness"
+          tmpdir <- tempdir()
+          raster::writeRaster(multi.sp$richness, file.path(tmpdir, fileName),
+                              format = input$richFileType, overwrite = TRUE)
+          owd <- setwd(tmpdir)
+          fs <- paste0(fileName, c('.grd', '.gri'))
+          zip::zipr(zipfile = file, files = fs)
+          setwd(owd)
+        } else {
+          r <- raster::writeRaster(multi.sp$richness, file,
+                                   format = input$richFileType,
+                                   overwrite = TRUE)
+          file.rename(r@file@name, file)
+        }
+      } else {
+        logger %>% writeLog("Please install the sf package before downloading rasters.")
+      }
+    }
+  )
+
+  # download endemism map
+  output$dlEnd <- downloadHandler(
+    filename = function() {
+      ext <- switch(input$endFileType, raster = 'zip', ascii = 'asc',
+                    GTiff = 'tif', png = 'png')
+
+      paste0( "endemism", '.', ext)
+
+    },
+    content = function(file) {
+      if(require(sf)) {
+        if (input$endFileType == 'png') {
+          if (!webshot::is_phantomjs_installed()) {
+            logger %>%
+              writeLog(type = "error", "To download PNG prediction, you need to",
+                       " install PhantomJS in your machine. You can use webshot::install_phantomjs()",
+                       " in your R console. ")
+          }
+          endem <- multi.sp$endemism
+          rasCols <- c("#3288BD", "#99D594", "#E6F598",
+                       "#FEE08B", "#FC8D59", "#D53E4F")
+          minV <- raster::minValue(endem)
+          maxV <- raster::maxValue(endem)
+          quanRas <- quantile(c(minV, maxV),
+                              probs = seq(0, 1, 0.1))
+          legendPal <- colorNumeric(rev(rasCols), quanRas,
+                                    na.color = 'transparent')
+
+          m <- leaflet() %>%
+            addProviderTiles(input$bmap) %>%
+            addLegend("bottomright", pal = legendPal,
+                      title = "Species<br>endemism",
+                      values = quanRas, layerId = "endemismLeg",
+                      labFormat = reverseLabel(2, reverse_order = TRUE)) %>%
+            leafem::addGeoRaster(endem,
+                                 colorOptions = leafem::colorOptions(
+                                   palette = colorRampPalette(colors = rasCols)),
+                                 opacity = 1, group = 'diver',
+                                 layerId = 'endemismRaster')
+          mapview::mapshot(m, file = file)
+        } else if (input$richFileType == 'raster') {
+          fileName <-  "endemism"
+          tmpdir <- tempdir()
+          raster::writeRaster(multi.sp$endemism, file.path(tmpdir, fileName),
+                              format = input$endFileType, overwrite = TRUE)
+          owd <- setwd(tmpdir)
+          fs <- paste0(fileName, c('.grd', '.gri'))
+          zip::zipr(zipfile = file, files = fs)
+          setwd(owd)
+        } else {
+          r <- raster::writeRaster(multi.sp$endemism, file,
+                                   format = input$endFileType,
+                                   overwrite = TRUE)
+          file.rename(r@file@name, file)
+        }
+      } else {
+        logger %>% writeLog("Please install the sf package before downloading rasters.")
+      }
+    }
+  )
   ########################################### #
   ### RMARKDOWN FUNCTIONALITY ####
   ########################################### #
@@ -1147,7 +1633,8 @@ function(input, output, session) {
 
       for (sp in allSp()) {
         species_rmds <- NULL
-        for (component in names(COMPONENT_MODULES[names(COMPONENT_MODULES) != c("espace", "rep")])) {
+        compNames <- names(COMPONENT_MODULES) %in% c("espace", "mask", "indic", "diver", "rep")
+        for (component in names(COMPONENT_MODULES[!compNames])) {
           for (module in COMPONENT_MODULES[[component]]) {
             rmd_file <- module$rmd_file
             rmd_function <- module$rmd_function
@@ -1202,7 +1689,7 @@ function(input, output, session) {
               } else {
                 rmd_vars <- do.call(rmd_function, list(species = spp[[sp]]))
               }
-              knit_params <- c(
+              knit_params <- list(
                 file = rmd_file,
                 spName1 = spName(namesMult[1]),
                 spName2 = spName(namesMult[2]),
@@ -1330,6 +1817,8 @@ function(input, output, session) {
                         encoding = "UTF-8")
     })
 
+  bioSp <- reactive(input$bioSp)
+
   ################################
   ### COMMON LIST FUNTIONALITY ####
   ################################
@@ -1342,6 +1831,7 @@ function(input, output, session) {
     curSp = curSp,
     allSp = allSp,
     multSp = multSp,
+    multi.sp = multi.sp,
     curEnv = curEnv,
     curModel = curModel,
     component = component,
@@ -1358,10 +1848,27 @@ function(input, output, session) {
     bgExt = bgExt,
     bgMask = bgMask,
     bgShpXY = bgShpXY,
+    polyExt = polyExt,
+    bgPostXY = bgPostXY,
     selCatEnvs = selCatEnvs,
+    selMaskPrExp = selMaskPrExp,
+    selMaskPrSpa = selMaskPrSpa,
+    selMaskPrTemp = selMaskPrTemp,
+    selTempRaster = selTempRaster,
+    yearInput = yearInput,
+    selTempMask = selTempMask,
+    sliderTemp = sliderTemp,
+    maskFields = maskFields,
+    maskAttribute = maskAttribute,
+    bioSp = bioSp,
     evalOut = evalOut,
     mapPred = mapPred,
     mapXfer = mapXfer,
+    selAreaSource = selAreaSource,
+    selOverlapSource = selOverlapSource,
+    overlapField = overlapField,
+    overlapCat  = overlapCat,
+    selTimeSource = selTimeSource,
     rmm = rmm,
 
     # Switch to a new component tab
@@ -1406,11 +1913,13 @@ function(input, output, session) {
     state <- list()
 
     spp_save <- reactiveValuesToList(spp)
+    multi.sp_save <- reactiveValuesToList(multi.sp)
 
     # Save general data
     state$main <- list(
       version = as.character(packageVersion("wallace")),
       spp = spp_save,
+      multi.sp = multi.sp_save,
       envs_global = reactiveValuesToList(envs.global),
       cur_sp = input$curSp,
       selected_module = sapply(COMPONENTS, function(x) input[[glue("{x}Sel")]], simplify = FALSE)

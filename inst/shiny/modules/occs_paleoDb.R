@@ -1,6 +1,6 @@
 # Wallace EcoMod: a flexible platform for reproducible modeling of
 # species niches and distributions.
-# 
+#
 # occs_paleoDb.R
 # File author: Wallace EcoMod Dev Team. 2023.
 # --------------------------------------------------------------------------

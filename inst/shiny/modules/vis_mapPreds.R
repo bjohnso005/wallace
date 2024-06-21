@@ -153,7 +153,6 @@ vis_mapPreds_module_server <- function(input, output, session, common) {
       raster::crs(predSel) <- raster::crs(bgMask())
       # define predSel name
       names(predSel) <- curModel()
-
     }
 
     # generate binary prediction based on selected thresholding rule
@@ -203,10 +202,21 @@ vis_mapPreds_module_server <- function(input, output, session, common) {
     # LOAD INTO SPP ####
     spp[[curSp()]]$visualization$occPredVals <- occPredVals
     if (input$threshold != 'none') {
-      spp[[curSp()]]$visualization$thresholds <- thr.sel # were you recording multiple before?
+      spp[[curSp()]]$visualization$thresholds <- thr.sel
     }
     spp[[curSp()]]$visualization$mapPred <- predSel.thr
     spp[[curSp()]]$visualization$mapPredVals <- getRasterVals(predSel.thr, predType)
+    # For Biomodelos
+    spp[[curSp()]]$biomodelos$prediction <- predSel
+    occsOmitted <- ifelse(input$threshold == 'none', NA,
+                          nrow(occs.xy) - sum(raster::extract(predSel.thr, occs.xy)))
+    spp[[curSp()]]$biomodelos$occsOmitted <- occsOmitted
+
+    biom.thr <- quantile(occPredVals,
+                         probs = c(0, 0.1, 0.2, 0.3))
+    biom.thr <- c(biom.thr, ifelse(input$threshold == 'none', NA, thr.sel))
+    names(biom.thr) <- c("0", "10", "20", "30", "user-specified")
+    spp[[curSp()]]$biomodelos$thrs <- biom.thr
     # METADATA ####
     spp[[curSp()]]$rmd$vis_curModel <- curModel()
     spp[[curSp()]]$rmm$prediction$Type <- predType
@@ -248,12 +258,12 @@ vis_mapPreds_module_server <- function(input, output, session, common) {
 }
 
 vis_mapPreds_module_map <- function(map, common) {
-
-  spp <- common$spp
   curSp <- common$curSp
+  spp <- common$spp
+  req(spp[[curSp()]]$occs)
+  occs <- common$occs
   mapPred <- common$mapPred
   rmm <- common$rmm
-  occs <- common$occs
   bgShpXY <- common$bgShpXY
 
   # Map logic
@@ -279,14 +289,6 @@ vis_mapPreds_module_map <- function(map, common) {
                 labFormat = reverseLabel(2, reverse_order = TRUE))
   }
 
-  # function to map all background polygons
-  mapBgPolys <- function(map, bgShpXY) {
-    for (shp in bgShpXY) {
-      map %>%
-        addPolygons(lng = shp[,1], lat = shp[,2], fill = FALSE,
-                    weight = 4, color = "blue", group = 'proj')
-    }
-  }
   # map model prediction raster
   map %>%
     addCircleMarkers(data = occs(), lat = ~latitude, lng = ~longitude,
@@ -295,7 +297,7 @@ vis_mapPreds_module_map <- function(map, common) {
     addRasterImage(mapPred(), colors = rasPal, opacity = 0.7,
                    group = 'vis', layerId = 'mapPred', method = "ngb") %>%
     # add background polygon(s)
-    mapBgPolys(bgShpXY())
+    mapBgPolys(bgShpXY(), color = "blue", group = 'proj')
 }
 
 vis_mapPreds_module_rmd <- function(species) {

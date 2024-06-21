@@ -128,7 +128,6 @@ envs_worldclim_module_server <- function(input, output, session, common) {
         # When remOccs is null, means that all localities have NAs
         return()
       }
-
       logger %>% writeLog(hlSpp(sp), "Worldclim variables ready to use.")
 
       # LOAD INTO SPP ####
@@ -196,7 +195,9 @@ envs_worldclim_module_result <- function(id) {
 }
 
 envs_worldclim_module_map <- function(map, common) {
-  # Map logic
+  curSp <- common$curSp
+  spp <- common$spp
+  req(spp[[curSp()]]$occs)
   occs <- common$occs
   mapCntr <- c(mean(occs()$longitude), mean(occs()$latitude))
   lon_tile <- seq(-180, 180, 30)
