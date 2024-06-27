@@ -1,6 +1,6 @@
 # Wallace EcoMod: a flexible platform for reproducible modeling of
 # species niches and distributions.
-# 
+#
 # global.R
 # File author: Wallace EcoMod Dev Team. 2023.
 # --------------------------------------------------------------------------
@@ -51,7 +51,7 @@ COMPONENT_MODULES <- list()
 # Load all Wallace base modules
 base_module_configs <- c(
   "modules/occs_queryDb.yml",
-  # "modules/occs_paleoDb.yml",
+  "modules/occs_paleoDb.yml",
   "modules/occs_userOccs.yml",
   "modules/envs_worldclim.yml",
   "modules/envs_ecoclimate.yml",
