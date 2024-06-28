@@ -1,6 +1,6 @@
 # Wallace EcoMod: a flexible platform for reproducible modeling of
 # species niches and distributions.
-# 
+#
 # envs_userEnvs.R
 # File author: Wallace EcoMod Dev Team. 2023.
 # --------------------------------------------------------------------------
@@ -72,17 +72,17 @@ envs_userEnvs_module_server <- function(input, output, session, common) {
                               doBrick = input$doBrick,
                               logger)
 
-    smartProgress(logger, message = "Checking NA values...", {
-      checkNA <- terra::global(terra::rast(userEnvs),
-                               fun = "isNA")
-    })
-
-    if (length(unique(checkNA$isNA)) != 1) {
-      logger %>% writeLog(
-        type = "error",
-        'Input rasters have unmatching NAs pixel values.')
-      return()
-    }
+    # smartProgress(logger, message = "Checking NA values...", {
+    #   checkNA <- terra::global(terra::rast(userEnvs),
+    #                            fun = "isNA")
+    # })
+    #
+    # if (length(unique(checkNA$isNA)) != 1) {
+    #   logger %>% writeLog(
+    #     type = "error",
+    #     'Input rasters have unmatching NAs pixel values.')
+    #   return()
+    # }
 
     # loop over all species if batch is on
     if (input$batch == TRUE) {
